@@ -58,5 +58,8 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/no-var-requires': 'off',
     'react/jsx-uses-react': 'off',
+    'react/function-component-definition': 'off',
+    'react/no-unused-state': 'off',
+    'no-console': ['error', { allow: ['warn', 'error'] }],
   },
 };
