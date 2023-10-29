@@ -1,0 +1,16 @@
+.card {
+  border: 1 px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: aquamarine;
+}
+
+.card h3 {
+  margin: 0 0 10px;
+  font-size: 1.5rem;
+}
+
+.card p {
+  margin: 5px 0;
+}
