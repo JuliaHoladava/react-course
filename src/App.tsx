@@ -2,6 +2,7 @@ import React from 'react';
 import SearchBar from './SearchBar';
 import Results from './Results';
 import { AppState } from './interfaces';
+import ErrorBoundary from './ErrorBoundary';
 
 async function fetchResults(searchTerm: string) {
   const url = `https://swapi.dev/api/people/?search=${searchTerm}`;
@@ -34,10 +35,19 @@ class App extends React.Component<object, AppState> {
   render() {
     const { results } = this.state;
     return (
-      <>
+      <ErrorBoundary>
+        <button
+          className="button-error"
+          type="button"
+          onClick={() => {
+            throw new Error('Test error');
+          }}
+        >
+          Generate Error
+        </button>
         <SearchBar setSearchTerm={this.setSearchTerm} />
         <Results results={results} />
-      </>
+      </ErrorBoundary>
     );
   }
 }

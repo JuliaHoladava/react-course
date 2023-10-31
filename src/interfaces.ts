@@ -31,3 +31,7 @@ export interface StarWarsCharacter {
 export interface ApiResponse {
   results: StarWarsCharacter[];
 }
+
+export interface ErrorBoundaryState {
+  hasError: boolean;
+}
