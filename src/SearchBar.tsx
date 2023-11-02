@@ -1,51 +1,36 @@
-import React from 'react';
-import { SearchBarProps, SearchBarState } from './interfaces';
+import { useEffect, useState } from 'react';
+import { SearchBarProps } from './interfaces';
 import './SearchBar.css';
 import './App.css';
 
-class SearchBar extends React.Component<SearchBarProps, SearchBarState> {
-  constructor(props: SearchBarProps) {
-    super(props);
-    this.state = {
-      localSearchTerm: '',
-    };
-  }
+const SearchBar = ({ setSearchTerm }: SearchBarProps) => {
+  const [localSearchTerm, setLocalSearchTerm] = useState('');
 
-  componentDidMount() {
-    const { setSearchTerm } = this.props;
+  useEffect(() => {
     const storedSearchTerm = localStorage.getItem('lastSearch') || '';
-    this.setState({ localSearchTerm: storedSearchTerm });
+    setLocalSearchTerm(storedSearchTerm);
     setSearchTerm(storedSearchTerm);
-  }
+  }, [setSearchTerm]);
 
-  handleSearch = () => {
-    const { setSearchTerm } = this.props;
-    const { localSearchTerm } = this.state;
+  const handleSearch = () => {
     const trimmedTerm = localSearchTerm.trim();
     setSearchTerm(trimmedTerm);
     localStorage.setItem('lastSearch', trimmedTerm);
   };
 
-  render() {
-    const { localSearchTerm } = this.state;
-    return (
-      <div className="_container search-bar">
-        <input
-          className="input-search"
-          type="text"
-          value={localSearchTerm}
-          onChange={(e) => this.setState({ localSearchTerm: e.target.value })}
-        />
-        <button
-          className="button-search"
-          type="submit"
-          onClick={this.handleSearch}
-        >
-          Search
-        </button>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="_container search-bar">
+      <input
+        className="input-search"
+        type="text"
+        value={localSearchTerm}
+        onChange={(e) => setLocalSearchTerm(e.target.value)}
+      />
+      <button className="button-search" type="submit" onClick={handleSearch}>
+        Search
+      </button>
+    </div>
+  );
+};
 
 export default SearchBar;
