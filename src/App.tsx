@@ -2,14 +2,7 @@ import { useCallback, useState } from 'react';
 import SearchBar from './SearchBar';
 import Results from './Results';
 import ErrorBoundary from './ErrorBoundary';
-
-async function fetchResults(searchTerm: string) {
-  const url = `https://swapi.dev/api/people/?search=${searchTerm}`;
-  const response = await fetch(url);
-  const data = await response.json();
-
-  return data.results;
-}
+import fetchResults from './FetchResult';
 
 const App = () => {
   const [results, setResults] = useState([]);
