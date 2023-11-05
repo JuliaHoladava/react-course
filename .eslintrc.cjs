@@ -61,5 +61,6 @@ module.exports = {
     'react/function-component-definition': 'off',
     'react/no-unused-state': 'off',
     'no-console': ['error', { allow: ['warn', 'error'] }],
+    'no-plusplus': 'off',
   },
 };
