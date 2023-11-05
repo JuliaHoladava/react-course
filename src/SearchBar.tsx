@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import { SearchBarProps } from './interfaces';
 import './SearchBar.css';
 import './App.css';
@@ -29,6 +30,7 @@ const SearchBar = ({ setSearchTerm }: SearchBarProps) => {
       <button className="button-search" type="submit" onClick={handleSearch}>
         Search
       </button>
+      <Outlet />
     </div>
   );
 };
