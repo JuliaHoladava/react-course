@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ResultsProps } from './interfaces';
 import './Results.css';
 
-const Results: React.FC<ResultsProps> = ({ results, count }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [currentPage, setCurrentPage] = useState<number>(
-    parseInt(searchParams.get('page') || '1', 10)
-  );
-  const itemsPerPage = 10;
+const Results: React.FC<ResultsProps> = ({
+  results,
+  count,
+  page,
+  goToPage,
+}) => {
+  const [, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    setSearchParams({ page: currentPage.toString() });
-  }, [currentPage, setSearchParams]);
+    setSearchParams({ page: page.toString() });
+  }, [page, setSearchParams]);
 
+  const itemsPerPage = 10;
   const totalPages = Math.ceil(count / itemsPerPage);
-  const goToPage = (page: number) => {
-    setCurrentPage(page);
-  };
-  const goToNextPage = () => setCurrentPage(currentPage + 1);
-  const goToPreviousPage = () => setCurrentPage(currentPage - 1);
+
+  const goToNextPage = () => goToPage(page + 1);
+  const goToPreviousPage = () => goToPage(page - 1);
 
   const renderPagination = (): JSX.Element[] => {
     const pages: JSX.Element[] = [];
@@ -30,7 +30,7 @@ const Results: React.FC<ResultsProps> = ({ results, count }) => {
           type="button"
           key={i}
           onClick={() => goToPage(i)}
-          disabled={currentPage === i}
+          disabled={page === i}
         >
           {i}
         </button>
@@ -40,14 +40,10 @@ const Results: React.FC<ResultsProps> = ({ results, count }) => {
     return pages;
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = results.slice(indexOfFirstItem, indexOfLastItem);
-
   return (
     <>
       <div className="_container result">
-        {currentItems.map((result) => (
+        {results.map((result) => (
           <div key={result.id} className="card">
             <h3>{result.name}</h3>
             <p>Height: {result.height ? result.height : 'No data'}</p>
@@ -62,18 +58,14 @@ const Results: React.FC<ResultsProps> = ({ results, count }) => {
         ))}
       </div>
       <div className="_container pagination">
-        <button
-          type="button"
-          onClick={goToPreviousPage}
-          disabled={currentPage === 1}
-        >
+        <button type="button" onClick={goToPreviousPage} disabled={page === 1}>
           Prev
         </button>
         {renderPagination()}
         <button
           type="button"
           onClick={goToNextPage}
-          disabled={currentPage === totalPages}
+          disabled={page === totalPages}
         >
           Next
         </button>

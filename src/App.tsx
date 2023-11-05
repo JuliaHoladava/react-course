@@ -11,27 +11,28 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const fetchPageResults = useCallback(
-    async (term: string, currentPage: number) => {
-      try {
-        const fetchedResults = await fetchResults(term, currentPage);
-        setResults(fetchedResults.results);
-        setCount(fetchedResults.count);
-      } catch (error) {
-        console.error('Executing fetch error', error);
-      }
-    },
-    []
-  );
+  const fetchPageResults = async (term: string, currentPage: number) => {
+    try {
+      const fetchedResults = await fetchResults(term, currentPage);
+      setResults(fetchedResults.results);
+      setCount(fetchedResults.count);
+    } catch (error) {
+      console.error('Executing fetch error', error);
+    }
+  };
 
   useEffect(() => {
     fetchPageResults(searchTerm, page);
-  }, [fetchPageResults, searchTerm, page]);
+  }, [searchTerm, page]);
 
   const handleSetSearchTerm = useCallback((term: string) => {
     setSearchTerm(term);
     setPage(1);
   }, []);
+
+  const goToPage = (newPage: number) => {
+    setPage(newPage);
+  };
 
   return (
     <BrowserRouter>
@@ -52,7 +53,14 @@ const App = () => {
           >
             <Route
               index
-              element={<Results results={results} count={count} />}
+              element={
+                <Results
+                  results={results}
+                  count={count}
+                  page={page}
+                  goToPage={goToPage}
+                />
+              }
             />
           </Route>
         </Routes>
