@@ -8,6 +8,7 @@ export interface SearchBarState {
 
 export interface ResultsProps {
   results: StarWarsCharacter[];
+  count: number;
 }
 
 export interface AppState {
