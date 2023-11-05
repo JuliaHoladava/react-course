@@ -1,9 +1,14 @@
-async function fetchResults(searchTerm: string) {
-  const url = `https://swapi.dev/api/people/?search=${searchTerm}`;
+async function fetchResults(searchTerm: string, page: number) {
+  const url = `https://swapi.dev/api/people/?search=${searchTerm}&page=${page}`;
   const response = await fetch(url);
   const data = await response.json();
 
-  return data.results;
+  return {
+    results: data.results,
+    count: data.count,
+    next: data.next,
+    previous: data.previous,
+  };
 }
 
 export default fetchResults;
