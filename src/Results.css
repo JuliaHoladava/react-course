@@ -1,9 +1,16 @@
+.result {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .card {
+  width: 300px;
+  margin: 10px 0;
+  padding: 10px;
+  background-color: aquamarine;
   border: 1 px solid #ccc;
   border-radius: 5px;
-  padding: 10px;
-  margin: 10px 0;
-  background-color: aquamarine;
 }
 
 .card h3 {
@@ -13,4 +20,12 @@
 
 .card p {
   margin: 5px 0;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  background-color: beige;
 }
