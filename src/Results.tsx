@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ResultsProps } from './interfaces';
 import './Results.css';
+import Pagination from './Pagination';
 
 const Results: React.FC<ResultsProps> = ({
   results,
@@ -17,28 +18,6 @@ const Results: React.FC<ResultsProps> = ({
 
   const itemsPerPage = 10;
   const totalPages = Math.ceil(count / itemsPerPage);
-
-  const goToNextPage = () => goToPage(page + 1);
-  const goToPreviousPage = () => goToPage(page - 1);
-
-  const renderPagination = (): JSX.Element[] => {
-    const pages: JSX.Element[] = [];
-
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(
-        <button
-          type="button"
-          key={i}
-          onClick={() => goToPage(i)}
-          disabled={page === i}
-        >
-          {i}
-        </button>
-      );
-    }
-
-    return pages;
-  };
 
   return (
     <>
@@ -57,19 +36,7 @@ const Results: React.FC<ResultsProps> = ({
           </div>
         ))}
       </div>
-      <div className="_container pagination">
-        <button type="button" onClick={goToPreviousPage} disabled={page === 1}>
-          Prev
-        </button>
-        {renderPagination()}
-        <button
-          type="button"
-          onClick={goToNextPage}
-          disabled={page === totalPages}
-        >
-          Next
-        </button>
-      </div>
+      <Pagination page={page} totalPages={totalPages} goToPage={goToPage} />
     </>
   );
 };

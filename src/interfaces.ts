@@ -13,6 +13,12 @@ export interface ResultsProps {
   goToPage: (page: number) => void;
 }
 
+export interface PaginationProps {
+  totalPages: number;
+  page: number;
+  goToPage: (page: number) => void;
+}
+
 export interface AppState {
   searchTerm: string;
   results: StarWarsCharacter[];

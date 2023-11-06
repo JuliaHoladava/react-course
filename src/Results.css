@@ -21,11 +21,3 @@
 .card p {
   margin: 5px 0;
 }
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  padding-top: 10px;
-  padding-bottom: 30px;
-  background-color: beige;
-}
