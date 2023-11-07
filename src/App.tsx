@@ -55,7 +55,7 @@ const App = () => {
               index
               element={
                 <Results
-                  results={results}
+                  initialResults={results}
                   count={count}
                   page={page}
                   goToPage={goToPage}
