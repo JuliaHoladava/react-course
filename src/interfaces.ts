@@ -7,7 +7,7 @@ export interface SearchBarState {
 }
 
 export interface ResultsProps {
-  results: StarWarsCharacter[];
+  initialResults: StarWarsCharacter[];
   count: number;
   page: number;
   goToPage: (page: number) => void;
@@ -34,7 +34,8 @@ export interface StarWarsCharacter {
   birth_year: string;
   gender: string;
   homeworld: string;
-  id: number;
+  url: string;
+  id: string;
 }
 
 export interface ApiResponse {
@@ -43,4 +44,8 @@ export interface ApiResponse {
 
 export interface ErrorBoundaryState {
   hasError: boolean;
+}
+
+export interface DetailsProps {
+  character: StarWarsCharacter;
 }
