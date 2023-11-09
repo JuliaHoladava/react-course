@@ -1,5 +1,5 @@
 import React from 'react';
-import { DetailsProps } from './interfaces';
+import { DetailsProps } from '../../type/interfaces';
 
 const Details: React.FC<DetailsProps> = ({ character }) => {
   return (

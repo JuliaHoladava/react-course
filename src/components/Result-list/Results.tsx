@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ResultsProps, StarWarsCharacter } from './interfaces';
+import { ResultsProps, StarWarsCharacter } from '../../type/interfaces';
 import './Results.css';
-import Pagination from './Pagination';
-import Details from './Details';
+import Pagination from '../Pagination/Pagination';
+import Details from '../Details/Details';
 
 const Results: React.FC<ResultsProps> = ({
   initialResults,

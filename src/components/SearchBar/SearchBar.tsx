@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { SearchBarProps } from './interfaces';
+import { SearchBarProps } from '../../type/interfaces';
 import './SearchBar.css';
-import './App.css';
+import '../../pages/home/App.css';
 
 const SearchBar = ({ setSearchTerm }: SearchBarProps) => {
   const [localSearchTerm, setLocalSearchTerm] = useState('');

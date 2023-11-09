@@ -1,5 +1,5 @@
 import React from 'react';
-import { PaginationProps } from './interfaces';
+import { PaginationProps } from '../../type/interfaces';
 import './Pagination.css';
 
 const Pagination: React.FC<PaginationProps> = ({

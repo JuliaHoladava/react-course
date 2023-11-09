@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import SearchBar from './SearchBar';
-import Results from './Results';
-import ErrorBoundary from './ErrorBoundary';
-import fetchResults from './FetchResult';
+import SearchBar from '../../components/SearchBar/SearchBar';
+import Results from '../../components/Result-list/Results';
+import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import fetchResults from '../../api/FetchResult';
 
 const App = () => {
   const [results, setResults] = useState([]);
