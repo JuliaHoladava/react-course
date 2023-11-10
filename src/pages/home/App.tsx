@@ -10,14 +10,18 @@ const App = () => {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchPageResults = async (term: string, currentPage: number) => {
+    setIsLoading(true);
     try {
       const fetchedResults = await fetchResults(term, currentPage);
       setResults(fetchedResults.results);
       setCount(fetchedResults.count);
     } catch (error) {
       console.error('Executing fetch error', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -37,6 +41,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <ErrorBoundary>
+        {isLoading && <div>Loading...</div>}
         <button
           className="button-error"
           type="button"
@@ -59,6 +64,7 @@ const App = () => {
                   count={count}
                   page={page}
                   goToPage={goToPage}
+                  isLoading={isLoading}
                 />
               }
             />

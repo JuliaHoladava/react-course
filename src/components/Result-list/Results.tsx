@@ -10,6 +10,7 @@ const Results: React.FC<ResultsProps> = ({
   count,
   page,
   goToPage,
+  isLoading,
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [results, setResults] = useState<StarWarsCharacter[]>(initialResults);
@@ -77,6 +78,10 @@ const Results: React.FC<ResultsProps> = ({
     setShowDetails(false);
     setSearchParams({ page: page.toString() });
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>

@@ -11,6 +11,7 @@ export interface ResultsProps {
   count: number;
   page: number;
   goToPage: (page: number) => void;
+  isLoading: boolean;
 }
 
 export interface PaginationProps {
