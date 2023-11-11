@@ -1,31 +1,38 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useContext } from 'react';
 import { Outlet } from 'react-router-dom';
-import { SearchBarProps } from '../../type/interfaces';
+import { SearchContext } from '../SearchContext/SearchContext';
 import './SearchBar.css';
 import '../../pages/home/App.css';
 
-const SearchBar = ({ setSearchTerm }: SearchBarProps) => {
-  const [localSearchTerm, setLocalSearchTerm] = useState('');
+const SearchBar = () => {
+  const context = useContext(SearchContext);
 
   useEffect(() => {
     const storedSearchTerm = localStorage.getItem('lastSearch') || '';
-    setLocalSearchTerm(storedSearchTerm);
-    setSearchTerm(storedSearchTerm);
-  }, [setSearchTerm]);
+    if (context) {
+      context.setSearchTerm(storedSearchTerm);
+    }
+  }, [context]);
 
   const handleSearch = () => {
-    const trimmedTerm = localSearchTerm.trim();
-    setSearchTerm(trimmedTerm);
-    localStorage.setItem('lastSearch', trimmedTerm);
+    if (context) {
+      const trimmedTerm = context.searchTerm.trim();
+      context.setSearchTerm(trimmedTerm);
+      localStorage.setItem('lastSearch', trimmedTerm);
+    }
   };
+
+  if (!context) {
+    return null;
+  }
 
   return (
     <div className="_container search-bar">
       <input
         className="input-search"
         type="text"
-        value={localSearchTerm}
-        onChange={(e) => setLocalSearchTerm(e.target.value)}
+        value={context.searchTerm}
+        onChange={(e) => context.setSearchTerm(e.target.value)}
       />
       <button className="button-search" type="submit" onClick={handleSearch}>
         Search
