@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ResultsProps, StarWarsCharacter } from '../../type/interfaces';
-import './Results.css';
 import Pagination from '../Pagination/Pagination';
 import Details from '../Details/Details';
+import { SearchContext } from '../SearchContext/SearchContext';
+import { StarWarsCharacter } from '../../type/interfaces';
+import './Results.css';
 
-const Results: React.FC<ResultsProps> = ({
-  initialResults,
-  count,
-  page,
-  goToPage,
-  isLoading,
-}) => {
+const Results: React.FC = () => {
+  const context = useContext(SearchContext);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [results, setResults] = useState<StarWarsCharacter[]>(initialResults);
+  const [localResults, setLocalResults] = useState<StarWarsCharacter[]>([]);
   const [selectedCharacter, setSelectedCharacter] =
     useState<StarWarsCharacter | null>(null);
   const [showDetails, setShowDetails] = useState(false);
@@ -24,16 +20,18 @@ const Results: React.FC<ResultsProps> = ({
   };
 
   useEffect(() => {
-    const updatedResults = initialResults.map((character) => ({
-      ...character,
-      id: getIdFromUrl(character.url),
-    }));
-    setResults(updatedResults);
-  }, [initialResults]);
+    if (context) {
+      const updatedResults = context.results.map((character) => ({
+        ...character,
+        id: getIdFromUrl(character.url),
+      }));
+      setLocalResults(updatedResults);
+    }
+  }, [context]);
 
   useEffect(() => {
     const detailsId = searchParams.get('details');
-    const newPageParam = page.toString();
+    const newPageParam = context?.page.toString() || '1';
 
     if (
       searchParams.get('page') !== newPageParam ||
@@ -52,17 +50,17 @@ const Results: React.FC<ResultsProps> = ({
     }
 
     if (detailsId) {
-      const character = results.find(
+      const character = localResults.find(
         (char) => getIdFromUrl(char.url) === detailsId
       );
       setSelectedCharacter(character || null);
       setShowDetails(!!character);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, results, searchParams]);
+  }, [localResults, searchParams]);
 
   const itemsPerPage = 10;
-  const totalPages = Math.ceil(count / itemsPerPage);
+  const totalPages = context ? Math.ceil(context.count / itemsPerPage) : 0;
 
   const handleCharacterClick = (char: StarWarsCharacter) => {
     setSelectedCharacter(char);
@@ -76,10 +74,10 @@ const Results: React.FC<ResultsProps> = ({
   const handleCloseDetails = () => {
     setSelectedCharacter(null);
     setShowDetails(false);
-    setSearchParams({ page: page.toString() });
+    setSearchParams({ page: context?.page.toString() || '1' });
   };
 
-  if (isLoading) {
+  if (context?.isLoading) {
     return <div>Loading...</div>;
   }
 
@@ -87,7 +85,7 @@ const Results: React.FC<ResultsProps> = ({
     <>
       <div className="_container result">
         <div className="left-section">
-          {results.map((result) => (
+          {localResults.map((result) => (
             <div
               key={result.id}
               className="card"
@@ -119,7 +117,13 @@ const Results: React.FC<ResultsProps> = ({
           </div>
         )}
       </div>
-      <Pagination page={page} totalPages={totalPages} goToPage={goToPage} />
+      {context && (
+        <Pagination
+          page={context.page}
+          totalPages={totalPages}
+          goToPage={context.setPage}
+        />
+      )}
     </>
   );
 };
