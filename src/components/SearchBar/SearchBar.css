@@ -1,0 +1,18 @@
+.search-bar {
+  width: 100%;
+}
+
+.input-search {
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  background-color: #ccc;
+  width: (100% - 10px - 80px);
+}
+
+.button-search {
+  width: 100px;
+  margin-left: 10px;
+  color: white;
+  background-color: blueviolet;
+}
