@@ -1,28 +1,7 @@
-export interface SearchBarProps {
-  setSearchTerm: (searchTerm: string) => void;
-}
-
-export interface SearchBarState {
-  localSearchTerm: string;
-}
-
-export interface ResultsProps {
-  initialResults: StarWarsCharacter[];
-  count: number;
-  page: number;
-  goToPage: (page: number) => void;
-  isLoading: boolean;
-}
-
 export interface PaginationProps {
   totalPages: number;
   page: number;
   goToPage: (page: number) => void;
-}
-
-export interface AppState {
-  searchTerm: string;
-  results: StarWarsCharacter[];
 }
 
 export interface StarWarsCharacter {
@@ -39,14 +18,21 @@ export interface StarWarsCharacter {
   id: string;
 }
 
-export interface ApiResponse {
-  results: StarWarsCharacter[];
-}
-
 export interface ErrorBoundaryState {
   hasError: boolean;
 }
 
 export interface DetailsProps {
   character: StarWarsCharacter;
+}
+
+export interface SearchContextType {
+  searchTerm: string;
+  setSearchTerm: (searchTerm: string) => void;
+  results: StarWarsCharacter[];
+  setResults: (results: StarWarsCharacter[]) => void;
+  count: number;
+  page: number;
+  setPage: (page: number) => void;
+  isLoading: boolean;
 }
