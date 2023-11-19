@@ -1,43 +1,57 @@
-import { useEffect, useContext } from 'react';
-import { Outlet } from 'react-router-dom';
-import { SearchContext } from '../SearchContext/SearchContext';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setSearchTerm } from '../../redux/reducers/searchReducer';
+import {
+  setCount,
+  setPage,
+  setLoading,
+} from '../../redux/reducers/viewModelReducer';
+import { useFetchCharactersQuery } from '../../api/starWarsCharactersApi';
+import { RootState } from '../../redux/store';
 import './SearchBar.css';
 import '../../pages/home/App.css';
 
 const SearchBar = () => {
-  const context = useContext(SearchContext);
+  const dispatch = useDispatch();
+  const { searchTerm } = useSelector((state: RootState) => state.search);
+  const { page } = useSelector((state: RootState) => state.viewModel);
+  const { data, error, isLoading } = useFetchCharactersQuery({
+    searchTerm,
+    page,
+  });
 
   useEffect(() => {
     const storedSearchTerm = localStorage.getItem('lastSearch') || '';
-    if (context) {
-      context.setSearchTerm(storedSearchTerm);
+    dispatch(setSearchTerm(storedSearchTerm));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setCount(data.count));
+      dispatch(setPage(page));
     }
-  }, [context]);
+    dispatch(setLoading(isLoading));
+  }, [data, isLoading, dispatch, page]);
 
   const handleSearch = () => {
-    if (context) {
-      const trimmedTerm = context.searchTerm.trim();
-      context.setSearchTerm(trimmedTerm);
-      localStorage.setItem('lastSearch', trimmedTerm);
-    }
+    const trimmedTerm = searchTerm.trim();
+    dispatch(setSearchTerm(trimmedTerm));
+    localStorage.setItem('lastSearch', trimmedTerm);
   };
-
-  if (!context) {
-    return null;
-  }
 
   return (
     <div className="_container search-bar">
       <input
         className="input-search"
         type="text"
-        value={context.searchTerm}
-        onChange={(e) => context.setSearchTerm(e.target.value)}
+        value={searchTerm}
+        onChange={(e) => dispatch(setSearchTerm(e.target.value))}
       />
       <button className="button-search" type="submit" onClick={handleSearch}>
         Search
       </button>
-      <Outlet />
+      {error ? <p>Error loading data</p> : null}
+      {isLoading ? <p>Loading...</p> : null}
     </div>
   );
 };

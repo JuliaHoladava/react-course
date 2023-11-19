@@ -1,12 +1,24 @@
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { render, screen, fireEvent } from '@testing-library/react';
 import SearchBar from './SearchBar';
-import { SearchProvider } from '../SearchContext/SearchContext';
+import { searchReducer } from '../../redux/reducers/searchReducer';
+import { viewModelReducer } from '../../redux/reducers/viewModelReducer';
+import { starWarsCharactersApi } from '../../api/starWarsCharactersApi';
+
+const testStore = configureStore({
+  reducer: {
+    search: searchReducer,
+    viewModel: viewModelReducer,
+    [starWarsCharactersApi.reducerPath]: starWarsCharactersApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(starWarsCharactersApi.middleware),
+});
 
 describe('SearchBar component', () => {
-  let setItemMock: jest.SpyInstance;
-
   beforeEach(() => {
-    setItemMock = jest.spyOn(Storage.prototype, 'setItem');
+    jest.spyOn(Storage.prototype, 'setItem');
     Storage.prototype.getItem = jest.fn().mockReturnValue('');
   });
 
@@ -15,33 +27,28 @@ describe('SearchBar component', () => {
   });
 
   it('saves the entered value to local storage on search', () => {
-    // setItemMock = jest.spyOn(Storage.prototype, 'setItem');
-    // Storage.prototype.getItem = jest.fn().mockReturnValue('');
-
     render(
-      <SearchProvider>
+      <Provider store={testStore}>
         <SearchBar />
-      </SearchProvider>
+      </Provider>
     );
 
     const input = screen.getByRole('textbox') as HTMLInputElement;
     const searchButton = screen.getByRole('button', { name: 'Search' });
 
-    act(() => {
-      fireEvent.change(input, { target: { value: 'testing' } });
-      fireEvent.click(searchButton);
-    });
+    fireEvent.change(input, { target: { value: 'testing' } });
+    fireEvent.click(searchButton);
 
-    expect(setItemMock).toHaveBeenCalledWith('lastSearch', 'testing');
+    expect(localStorage.setItem).toHaveBeenCalledWith('lastSearch', 'testing');
   });
 
   it('retrieves the value from local storage on mount', () => {
     Storage.prototype.getItem = jest.fn().mockReturnValue('previous value');
 
     render(
-      <SearchProvider>
+      <Provider store={testStore}>
         <SearchBar />
-      </SearchProvider>
+      </Provider>
     );
 
     const input = screen.getByRole('textbox') as HTMLInputElement;

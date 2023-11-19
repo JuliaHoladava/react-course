@@ -1,91 +1,60 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Pagination from '../Pagination/Pagination';
 import Details from '../Details/Details';
-import { SearchContext } from '../SearchContext/SearchContext';
 import { StarWarsCharacter } from '../../type/interfaces';
 import './Results.css';
+import { useFetchCharactersQuery } from '../../api/starWarsCharactersApi';
+import useCharacterData from './hooks/useCharacterData';
 
 const Results: React.FC = () => {
-  const context = useContext(SearchContext);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [localResults, setLocalResults] = useState<StarWarsCharacter[]>([]);
   const [selectedCharacter, setSelectedCharacter] =
     useState<StarWarsCharacter | null>(null);
   const [showDetails, setShowDetails] = useState(false);
 
-  const getIdFromUrl = (url: string): string => {
-    const parts = url.replace(/\/$/, '').split('/');
-    return parts[parts.length - 1];
-  };
+  const searchTerm = searchParams.get('search') || '';
+  const page = parseInt(searchParams.get('page') || '1', 10);
 
-  useEffect(() => {
-    if (context) {
-      const updatedResults = context.results.map((character) => ({
-        ...character,
-        id: getIdFromUrl(character.url),
-      }));
-      setLocalResults(updatedResults);
-    }
-  }, [context]);
+  const { data, error, isLoading } = useFetchCharactersQuery({
+    searchTerm,
+    page,
+  });
 
-  useEffect(() => {
-    const detailsId = searchParams.get('details');
-    const newPageParam = context?.page.toString() || '1';
+  const resultsWithId = useCharacterData(data?.results);
 
-    if (
-      searchParams.get('page') !== newPageParam ||
-      (detailsId && searchParams.get('details') !== detailsId)
-    ) {
-      const newSearchParams: Record<string, string> = {
-        ...Object.fromEntries(searchParams.entries()),
-        page: newPageParam,
-      };
-
-      if (detailsId) {
-        newSearchParams.details = detailsId;
-      }
-
-      setSearchParams(newSearchParams, { replace: true });
-    }
-
-    if (detailsId) {
-      const character = localResults.find(
-        (char) => getIdFromUrl(char.url) === detailsId
-      );
-      setSelectedCharacter(character || null);
-      setShowDetails(!!character);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localResults, searchParams]);
-
+  const count = data?.count || 0;
   const itemsPerPage = 10;
-  const totalPages = context ? Math.ceil(context.count / itemsPerPage) : 0;
+  const totalPages = Math.ceil(count / itemsPerPage);
 
   const handleCharacterClick = (char: StarWarsCharacter) => {
     setSelectedCharacter(char);
     setShowDetails(true);
     setSearchParams({
       ...Object.fromEntries(searchParams.entries()),
-      details: getIdFromUrl(char.url),
+      details: char.id,
     });
   };
 
   const handleCloseDetails = () => {
     setSelectedCharacter(null);
     setShowDetails(false);
-    setSearchParams({ page: context?.page.toString() || '1' });
+    setSearchParams({ page: page.toString() });
   };
 
-  if (context?.isLoading) {
+  if (isLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.toString()}</div>;
   }
 
   return (
     <>
       <div className="_container result">
         <div className="left-section">
-          {localResults.map((result) => (
+          {resultsWithId.map((result) => (
             <div
               key={result.id}
               className="card"
@@ -117,13 +86,13 @@ const Results: React.FC = () => {
           </div>
         )}
       </div>
-      {context && (
-        <Pagination
-          page={context.page}
-          totalPages={totalPages}
-          goToPage={context.setPage}
-        />
-      )}
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        goToPage={(newPage) =>
+          setSearchParams({ search: searchTerm, page: newPage.toString() })
+        }
+      />
     </>
   );
 };

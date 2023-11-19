@@ -26,13 +26,23 @@ export interface DetailsProps {
   character: StarWarsCharacter;
 }
 
-export interface SearchContextType {
+export interface SearchState {
   searchTerm: string;
-  setSearchTerm: (searchTerm: string) => void;
+}
+
+export interface ViewModelState {
   results: StarWarsCharacter[];
-  setResults: (results: StarWarsCharacter[]) => void;
   count: number;
   page: number;
-  setPage: (page: number) => void;
   isLoading: boolean;
+}
+
+export interface CharactersResponse {
+  results: StarWarsCharacter[];
+  count: number;
+}
+
+export interface FetchCharactersArguments {
+  searchTerm: string;
+  page: number;
 }
