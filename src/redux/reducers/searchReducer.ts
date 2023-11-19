@@ -1,14 +1,15 @@
 import { AnyAction } from 'redux';
+import { SearchState } from '../../type/interfaces';
 
-const initialState = {
+const initialSearchState: SearchState = {
   searchTerm: '',
 };
 
 export const searchReducer = (
   // eslint-disable-next-line @typescript-eslint/default-param-last
-  state = initialState,
+  state = initialSearchState,
   action: AnyAction
-): typeof initialState => {
+): typeof initialSearchState => {
   switch (action.type) {
     case 'SET_SEARCH_TERM':
       return {
