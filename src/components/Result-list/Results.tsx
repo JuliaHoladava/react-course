@@ -6,6 +6,7 @@ import { StarWarsCharacter } from '../../type/interfaces';
 import './Results.css';
 import { useFetchCharactersQuery } from '../../api/starWarsCharactersApi';
 import useCharacterData from './hooks/useCharacterData';
+import CharacterCard from '../CharacterCard/CharacterCard';
 
 const Results: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -55,26 +56,11 @@ const Results: React.FC = () => {
       <div className="_container result">
         <div className="left-section">
           {resultsWithId.map((result) => (
-            <div
+            <CharacterCard
               key={result.id}
-              className="card"
-              onClick={() => handleCharacterClick(result)}
-              onKeyDown={(e) =>
-                e.key === 'Enter' && handleCharacterClick(result)
-              }
-              role="button"
-              tabIndex={0}
-            >
-              <h3>{result.name}</h3>
-              <p>Height: {result.height ? result.height : 'No data'}</p>
-              <p>Mass: {result.mass ? result.mass : 'No data'}</p>
-              <p>
-                Hair color: {result.hair_color ? result.hair_color : 'No data'}
-              </p>
-              <p>
-                Skin color: {result.skin_color ? result.skin_color : 'No data'}
-              </p>
-            </div>
+              character={result}
+              onCharacterClick={handleCharacterClick}
+            />
           ))}
         </div>
         {showDetails && selectedCharacter && (
