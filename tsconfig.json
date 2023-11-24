@@ -7,12 +7,12 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
 
     /* Linting */
     "strict": true,
@@ -23,6 +23,7 @@
     "types": ["jest"],
     "esModuleInterop": true
   },
-  "include": [".eslintrc.cjs", "src", "vite.config.ts", "jest.config.cjs"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [".eslintrc.cjs", "src", "jest.config.cjs"],
+  "references": [],
+  "exclude": ["node_modules"]
 }
