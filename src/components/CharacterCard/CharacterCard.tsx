@@ -1,6 +1,6 @@
 import React from 'react';
 import { StarWarsCharacter } from '../../type/interfaces';
-import './CharacterCard.css';
+// import './CharacterCard.css';
 
 interface CharacterCardProps {
   character: StarWarsCharacter;

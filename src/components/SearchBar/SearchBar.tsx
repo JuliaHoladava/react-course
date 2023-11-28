@@ -8,8 +8,8 @@ import {
 } from '../../redux/reducers/viewModelReducer';
 import { useFetchCharactersQuery } from '../../api/starWarsCharactersApi';
 import { RootState } from '../../redux/store';
-import './SearchBar.css';
-import '../../pages/home/App.css';
+// import './SearchBar.css';
+// import '../../pages/home/App.css';
 
 const SearchBar = () => {
   const dispatch = useDispatch();
