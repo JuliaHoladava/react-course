@@ -34,7 +34,10 @@ const RegistrationForm: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormInput>({ resolver: yupResolver(RegistrationSchema) });
+  } = useForm<IFormInput>({
+    resolver: yupResolver(RegistrationSchema),
+    mode: 'onChange',
+  });
 
   useEffect(() => {
     setValue('country', 'The Netherlands');
@@ -92,7 +95,7 @@ const RegistrationForm: React.FC = () => {
 
       <AuthInput
         {...register('password1')}
-        type="password"
+        type="text"
         label="Password1"
         name="password1"
         htmlFor="password1"
@@ -103,7 +106,7 @@ const RegistrationForm: React.FC = () => {
 
       <AuthInput
         {...register('password2')}
-        type="password"
+        type="text"
         label="Password2"
         name="password2"
         htmlFor="password2"
