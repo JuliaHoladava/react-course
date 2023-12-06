@@ -25,23 +25,25 @@ interface IAuthInput {
   accept?: string;
 }
 
-const AuthInput: React.FC<IAuthInput> = React.forwardRef(
-  ({
-    type,
-    label,
-    name,
-    htmlFor,
-    isPassword,
-    errors,
-    touched,
-    accept,
-  }: IAuthInput) => {
+const AuthInput = React.forwardRef<HTMLInputElement, IAuthInput>(
+  (
+    {
+      type,
+      label,
+      name,
+      htmlFor,
+      isPassword,
+      errors,
+      touched,
+      accept,
+      ...props
+    }: IAuthInput,
+    ref
+  ) => {
     const [isInputFocused, setIsInputFocused] = useState(false);
     const [isPasswordShowed, setIsPasswordShowed] = useState(false);
     const dispatch = useDispatch();
-    const formState = useSelector((state: RootState) => state.form);
-    const currentValue = formState[name];
-    const isChecked = type === 'checkbox' ? formState[name] : undefined;
+    const currentValue = useSelector((state: RootState) => state.form.name);
 
     const handlePasswordShow = (): void => {
       setIsPasswordShowed(!isPasswordShowed);
@@ -117,11 +119,10 @@ const AuthInput: React.FC<IAuthInput> = React.forwardRef(
                 type={isPasswordShowed ? 'text' : type}
                 onFocus={(): void => setIsInputFocused(true)}
                 onBlur={(): void => setIsInputFocused(false)}
-                value={type === 'checkbox' ? undefined : currentValue}
-                checked={type === 'checkbox' ? isChecked : undefined}
-                onChange={handleInputChange}
                 aria-invalid={errors && touched ? 'true' : 'false'}
                 aria-describedby={`${htmlFor}-error`}
+                ref={ref}
+                {...props}
               />
             )}
           </div>
