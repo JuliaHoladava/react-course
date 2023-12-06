@@ -1,0 +1,36 @@
+.auth {
+  &__input-container {
+    margin-bottom: 15px;
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 5px;
+    color: #0077b6;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 2px solid #0077b6;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  &__input-error {
+    color: #ff6347;
+    font-size: 14px;
+  }
+
+  &__password-icon {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: #0077b6;
+  }
+
+  &__password-icon_active {
+    color: #0096c7;
+  }
+}
